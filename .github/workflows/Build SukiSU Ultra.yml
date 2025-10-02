@@ -8,7 +8,7 @@ on:
         required: true
         type: choice
         options:
-          - 'sm8650'
+          - 'sm8750'
           - 'mt6989'
           - 'sm8635'
           - 'sm8550'
@@ -24,7 +24,7 @@ on:
         required: true
         type: choice
         options:
-          - 'oneplus_12'
+          - 'oneplus_13'
           - 'oneplus_ace3_pro'
           - 'oneplus_ace5'
           - 'oneplus_13r'
@@ -53,7 +53,7 @@ on:
         required: true
         type: choice
         options:
-          - 'pineapple'
+          - 'sun'
           - 'kalama'
           - 'waipio'
           - 'crow'
@@ -65,7 +65,7 @@ on:
         required: true
         type: choice
         options:
-          - 'android14'
+          - 'android15'
           - 'android13'
           - 'android12'
         default: 'android15'
@@ -75,7 +75,7 @@ on:
         required: true
         type: choice
         options:
-          - '6.1'
+          - '6.6'
           - '5.15'
           - '5.10'
         default: '6.6'
