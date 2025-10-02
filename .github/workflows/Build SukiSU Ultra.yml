@@ -252,9 +252,9 @@ jobs:
           git clone --depth=1 https://github.com/SunOS-Project/android_kernel_oneplus_sm8750-devicetrees -b bienor sm8750-devicetrees
           git clone --depth=1 https://github.com/SunOS-Project/android_kernel_oneplus_sm8750-modules -b bienor sm8750-modules
           git clone --depth=1 https://github.com/SunOS-Project/android_kernel_oneplus_sm8750 -b bienor common
-          mkdir Zyclang22 && cd Zyclang22
-          curl -L -O "https://github.com/ZyCromerZ/Clang/releases/download/22.0.0git-20250928-release/Clang-22.0.0git-20250928.tar.gz"
-          tar -xzvf Clang-22.0.0git-20250928.tar.gz
+          mkdir Zyclang20 && cd Zyclang20
+          curl -L -O "https://github.com/ZyCromerZ/Clang/releases/download/20.0.0git-20250129-release/Clang-20.0.0git-20250129.tar.gz"
+          tar -xzvf Clang-20.0.0git-20250129.tar.gz
           
           cd ../..
           echo "Kernel version:-${{ github.event.inputs.ANDROID_VERSION }}-Kirakira"
@@ -471,7 +471,7 @@ jobs:
           if [ "${{ github.event.inputs.KERNEL_VERSION }}" == "6.6" ]; then
             export KBUILD_BUILD_TIMESTAMP="Wed Aug  6 13:29:27 UTC 2025"
             export KBUILD_BUILD_VERSION=1
-            export PATH="$GITHUB_WORKSPACE/kernel_workspace/kernel_platform/Zyclang22/bin:$PATH"
+            export PATH="$GITHUB_WORKSPACE/kernel_workspace/kernel_platform/Zyclang20/bin:$PATH"
             export PATH="/usr/lib/ccache:$PATH"
             sudo apt install libelf-dev
             cd kernel_workspace/kernel_platform/common
