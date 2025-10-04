@@ -34,24 +34,24 @@ jobs:
           echo "🌐 正在初始化内核仓库..."
           
           mkdir kernel_workspace && cd kernel_workspace
-          git clone --depth=1 https://github.com/OnePlusOSS/android_kernel_modules_and_devicetree_oneplus_sm8750 -b oneplus/sm8750_v_15.0.2_oneplus_13t 1
-          cp -r ./1/* ./
-          cd ./kernel_platform
-          git clone --depth=1 https://github.com/TheGeniusClub/android_kernel_common_oneplus_sm8750 -b v11 common
-          #mkdir kernel_platform && cd kernel_platform
-          #git clone --depth=1 https://github.com/SunOS-Project/android_kernel_oneplus_sm8750-devicetrees -b bienor sm8750-devicetrees
-          #git clone --depth=1 https://github.com/SunOS-Project/android_kernel_oneplus_sm8750-modules -b bienor sm8750-modules
-          #git clone --depth=1 https://github.com/SunOS-Project/android_kernel_oneplus_sm8750 -b bienor common
+          #git clone --depth=1 https://github.com/OnePlusOSS/android_kernel_modules_and_devicetree_oneplus_sm8750 -b oneplus/sm8750_v_15.0.2_oneplus_13t 1
+          #cp -r ./1/* ./
+          #cd ./kernel_platform
+          #git clone --depth=1 https://github.com/TheGeniusClub/android_kernel_common_oneplus_sm8750 -b v11 common
+          mkdir kernel_platform && cd kernel_platform
+          git clone --depth=1 https://github.com/SunOS-Project/android_kernel_oneplus_sm8750-devicetrees -b bienor sm8750-devicetrees
+          git clone --depth=1 https://github.com/SunOS-Project/android_kernel_oneplus_sm8750-modules -b bienor sm8750-modules
+          git clone --depth=1 https://github.com/SunOS-Project/android_kernel_oneplus_sm8750 -b bienor common
           mkdir Zyclang20 && cd Zyclang20
           curl -L -O "https://github.com/ZyCromerZ/Clang/releases/download/20.0.0git-20250129-release/Clang-20.0.0git-20250129.tar.gz"
           tar -xzvf Clang-20.0.0git-20250129.tar.gz
           
-          #cd ..
-          #sed -i 's/CONFIG_ZRAM=m/CONFIG_ZRAM=y/g' ./common/arch/arm64/configs/gki_defconfig
-          #rm ./common/android/abi_gki_protected_exports_* || echo "No protected exports!"
-          #rm kernel_platform/msm-kernel/android/abi_gki_protected_exports_* || echo "No protected exports!"
-          #sed -i 's/echo "${KERNELVERSION}${file_localversion}${config_localversion}${LOCALVERSION}${scm_version}"/echo "${KERNELVERSION}${config_localversion}${LOCALVERSION}"/g' ./common/scripts/setlocalversion
-          #sed -i 's/CONFIG_LOCALVERSION="-4k"/CONFIG_LOCALVERSION="-Kirakira"/g' ./common/arch/arm64/configs/gki_defconfig
+          cd ..
+          sed -i 's/CONFIG_ZRAM=m/CONFIG_ZRAM=y/g' ./common/arch/arm64/configs/gki_defconfig
+          rm ./common/android/abi_gki_protected_exports_* || echo "No protected exports!"
+          rm kernel_platform/msm-kernel/android/abi_gki_protected_exports_* || echo "No protected exports!"
+          sed -i 's/echo "${KERNELVERSION}${file_localversion}${config_localversion}${LOCALVERSION}${scm_version}"/echo "${KERNELVERSION}${config_localversion}${LOCALVERSION}"/g' ./common/scripts/setlocalversion
+          sed -i 's/CONFIG_LOCALVERSION="-4k"/CONFIG_LOCALVERSION="-Kirakira"/g' ./common/arch/arm64/configs/gki_defconfig
           echo "✅ 内核配置完成"     
               
       # ====================== 内核定制阶段 ======================
@@ -77,10 +77,10 @@ jobs:
           cp ../susfs4ksu/kernel_patches/fs/* ./common/fs/
           cp ../susfs4ksu/kernel_patches/include/linux/* ./common/include/linux/
           
-          #cp -r ../SukiSU_patch/other/zram/lz4k/include/linux/* ./common/include/linux
-          #cp -r ../SukiSU_patch/other/zram/lz4k/lib/* ./common/lib
-          #cp -r ../SukiSU_patch/other/zram/lz4k/crypto/* ./common/crypto
-          #cp -r ../SukiSU_patch/other/zram/lz4k_oplus ./common/lib/
+          cp -r ../SukiSU_patch/other/zram/lz4k/include/linux/* ./common/include/linux
+          cp -r ../SukiSU_patch/other/zram/lz4k/lib/* ./common/lib
+          cp -r ../SukiSU_patch/other/zram/lz4k/crypto/* ./common/crypto
+          cp -r ../SukiSU_patch/other/zram/lz4k_oplus ./common/lib/
           
           
           echo "🔧 应用补丁..."
@@ -91,10 +91,10 @@ jobs:
           patch -p1 -F 3 < scope_min_manual_hooks_v1.5.patch
         
           #echo "🚀 应用lz4kd补丁..."
-          #cp ../../SukiSU_patch/other/zram/zram_patch/6.6/lz4kd.patch ./
-          #patch -p1 -F 3 < lz4kd.patch || true
-          #cp ../../SukiSU_patch/other/zram/zram_patch/6.6/lz4k_oplus.patch ./
-          #patch -p1 -F 3 < lz4k_oplus.patch || true
+          cp ../../SukiSU_patch/other/zram/zram_patch/6.6/lz4kd.patch ./
+          patch -p1 -F 3 < lz4kd.patch || true
+          cp ../../SukiSU_patch/other/zram/zram_patch/6.6/lz4k_oplus.patch ./
+          patch -p1 -F 3 < lz4k_oplus.patch || true
           
           echo "✅ 所有补丁应用完成"
 
@@ -131,14 +131,14 @@ jobs:
           echo "CONFIG_KSU_SUSFS_HIDE_KSU_SUSFS_SYMBOLS=y" >> ./common/arch/arm64/configs/gki_defconfig
           echo "CONFIG_KSU_SUSFS_SPOOF_CMDLINE_OR_BOOTCONFIG=y" >> ./common/arch/arm64/configs/gki_defconfig
           echo "CONFIG_KSU_SUSFS_OPEN_REDIRECT=y" >> ./common/arch/arm64/configs/gki_defconfig
-          #echo "CONFIG_ZSMALLOC=y" >> ./common/arch/arm64/configs/gki_defconfig
-          #echo "CONFIG_LTO_CLANG_THIN=y" >> ./common/arch/arm64/configs/gki_defconfig
-          #echo "CONFIG_LTO=y" >> ./common/arch/arm64/configs/gki_defconfig
+          echo "CONFIG_ZSMALLOC=y" >> ./common/arch/arm64/configs/gki_defconfig
+          echo "CONFIG_LTO_CLANG_THIN=y" >> ./common/arch/arm64/configs/gki_defconfig
+          echo "CONFIG_LTO=y" >> ./common/arch/arm64/configs/gki_defconfig
 
           #echo "📦 启用lz4kd压缩..."
-          #echo "CONFIG_CRYPTO_LZ4KD=y" >> ./common/arch/arm64/configs/gki_defconfig
-          #echo "CONFIG_CRYPTO_LZ4K_OPLUS=y" >> ./common/arch/arm64/configs/gki_defconfig
-          #echo "CONFIG_CRYPTO_LZO=y" >> ./common/arch/arm64/configs/gki_defconfig
+          echo "CONFIG_CRYPTO_LZ4KD=y" >> ./common/arch/arm64/configs/gki_defconfig
+          echo "CONFIG_CRYPTO_LZ4K_OPLUS=y" >> ./common/arch/arm64/configs/gki_defconfig
+          echo "CONFIG_CRYPTO_LZO=y" >> ./common/arch/arm64/configs/gki_defconfig
           
           # Remove check_defconfig
           sed -i 's/check_defconfig//' ./common/build.config.gki
@@ -158,14 +158,14 @@ jobs:
           
           echo "✅ 内核编译完成"
                     
-      - name: Apply Linux Patch
-        run: |
-          cd kernel_workspace/kernel_platform/common/out/arch/arm64/boot
-          curl -LO https://github.com/SukiSU-Ultra/SukiSU_KernelPatch_patch/releases/download/0.12.0/patch_linux
-          chmod +x patch_linux
-          ./patch_linux
-          rm -f Image
-          mv oImage Image
+      #- name: Apply Linux Patch
+        #run: |
+          #cd kernel_workspace/kernel_platform/common/out/arch/arm64/boot
+          #curl -LO https://github.com/SukiSU-Ultra/SukiSU_KernelPatch_patch/releases/download/0.12.0/patch_linux
+          #chmod +x patch_linux
+          #./patch_linux
+          #rm -f Image
+          #mv oImage Image
          
       - name: Make AnyKernel3
         run: |
