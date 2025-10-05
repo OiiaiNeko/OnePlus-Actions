@@ -151,7 +151,17 @@ jobs:
           rm -rf out 
           mkdir -p out
             
-          make -j$(nproc --all) LLVM=1 ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- CC=clang LD=ld.lld HOSTLD=ld.lld O=out gki_defconfig all
+          make ARCH=arm64 SUBARCH=arm64 O=out \
+          LLVM=1 \
+          LLVM_IAS=1 \
+          CC=clang \
+          CXX=clang++ \
+          HOSTCC=clang \
+          HOSTCXX=clang++ \
+          CLANG_TRIPLE=aarch64-linux-gnu- \
+          CROSS_COMPILE=aarch64-linux-gnu- \
+          CROSS_COMPILE_ARM32=arm-linux-gnueabi- \
+          gki_defconfig all
           
           echo "✅ 内核编译完成"
                     
