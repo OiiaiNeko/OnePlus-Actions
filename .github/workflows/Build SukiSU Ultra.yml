@@ -89,13 +89,10 @@ jobs:
           cp ../../SukiSU_patch/69_hide_stuff.patch ./
           patch -p1 -F 3 < 69_hide_stuff.patch
           patch -p1 -F 3 < scope_min_manual_hooks_v1.5.patch
-        
-          #echo "🚀 应用lz4kd补丁..."
           cp ../../SukiSU_patch/other/zram/zram_patch/6.6/lz4kd.patch ./
           patch -p1 -F 3 < lz4kd.patch || true
           cp ../../SukiSU_patch/other/zram/zram_patch/6.6/lz4k_oplus.patch ./
           patch -p1 -F 3 < lz4k_oplus.patch || true
-          
           echo "✅ 所有补丁应用完成"
 
       - name: "⚙️ Configure Kernel Options | 配置内核选项"
@@ -132,13 +129,13 @@ jobs:
           echo "CONFIG_KSU_SUSFS_SPOOF_CMDLINE_OR_BOOTCONFIG=y" >> ./common/arch/arm64/configs/gki_defconfig
           echo "CONFIG_KSU_SUSFS_OPEN_REDIRECT=y" >> ./common/arch/arm64/configs/gki_defconfig
           echo "CONFIG_ZSMALLOC=y" >> ./common/arch/arm64/configs/gki_defconfig
-          echo "CONFIG_LTO_CLANG_THIN=y" >> ./common/arch/arm64/configs/gki_defconfig
-          echo "CONFIG_LTO=y" >> ./common/arch/arm64/configs/gki_defconfig
 
           #echo "📦 启用lz4kd压缩..."
+          echo "CONFIG_CRYPTO_LZ4HC=y" >> ./common/arch/arm64/configs/gki_defconfig
+          echo "CONFIG_CRYPTO_LZ4K=y" >> ./common/arch/arm64/configs/gki_defconfig
           echo "CONFIG_CRYPTO_LZ4KD=y" >> ./common/arch/arm64/configs/gki_defconfig
-          echo "CONFIG_CRYPTO_LZ4K_OPLUS=y" >> ./common/arch/arm64/configs/gki_defconfig
-          echo "CONFIG_CRYPTO_LZO=y" >> ./common/arch/arm64/configs/gki_defconfig
+          echo "CONFIG_CRYPTO_842=y" >> ./common/arch/arm64/configs/gki_defconfig
+          echo "CONFIG_LOCALVERSION_AUTO=n" >> ./common/arch/arm64/configs/gki_defconfig
           
           # Remove check_defconfig
           sed -i 's/check_defconfig//' ./common/build.config.gki
@@ -154,18 +151,18 @@ jobs:
           rm -rf out 
           mkdir -p out
             
-          make -j$(nproc --all) LLVM=1 ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- CC="clang" LD=ld.lld HOSTLD=ld.lld O=out gki_defconfig all
+          make -j$(nproc --all) LLVM=1 ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- CC=clang LD=ld.lld HOSTLD=ld.lld O=out gki_defconfig all
           
           echo "✅ 内核编译完成"
                     
-      #- name: Apply Linux Patch
-        #run: |
-          #cd kernel_workspace/kernel_platform/common/out/arch/arm64/boot
-          #curl -LO https://github.com/SukiSU-Ultra/SukiSU_KernelPatch_patch/releases/download/0.12.0/patch_linux
-          #chmod +x patch_linux
-          #./patch_linux
-          #rm -f Image
-          #mv oImage Image
+      - name: Apply Linux Patch
+        run: |
+          cd kernel_workspace/kernel_platform/common/out/arch/arm64/boot
+          curl -LO https://github.com/SukiSU-Ultra/SukiSU_KernelPatch_patch/releases/download/0.12.0/patch_linux
+          chmod +x patch_linux
+          ./patch_linux
+          rm -f Image
+          mv oImage Image
          
       - name: Make AnyKernel3
         run: |
